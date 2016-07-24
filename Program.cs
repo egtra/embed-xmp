@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Xml.Linq;
 using iTextSharp.text.pdf;
 
@@ -39,7 +40,10 @@ namespace EmbedXMP
                 new XProcessingInstruction("xpacket", "end='r'")
             );
             var s = new MemoryStream();
-            output.Save(s, SaveOptions.DisableFormatting);
+            using (var writer = new StreamWriter(s, new UTF8Encoding(false)))
+            {
+                output.Save(writer, SaveOptions.DisableFormatting);
+            }
             return s.ToArray();
         }
     }
